@@ -6,6 +6,8 @@ CSGO self-aiming program based on YoloV5
 
 This project can only be used for learning and communication, not for commercial use, and cannot be used for illegal purposes (including but not limited to: for making game plug-ins, etc.).
 
+For more details：https://diduseemyelk.github.io/Lillia.github.io/2023/02/16/ji-yu-yolov5-de-you-xi-zi-miao-kuang-jia/
+
 ## How to use
 
 ### Train
