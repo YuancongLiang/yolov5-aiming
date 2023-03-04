@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-import cv2
 from models.experimental import attempt_load
 from utils.datasets import letterbox
 from utils.general import non_max_suppression, scale_coords
@@ -79,38 +78,6 @@ class Detector:
                         (x1, y1, x2, y2, lbl, conf))
 
         return boxes
-
-    def draw_box(self, image, boxes):
-        line_thickness = 2
-        list_pts = []
-        point_radius = 4  # 碰撞半径
-
-        for (x1, y1, x2, y2, lbl, conf) in boxes:
-            color = (0, 255, 0)
-            check_point_x = int(x1 + ((x2 - x1) * 0.5))
-            check_point_y = int(y1 + ((y2 - y1) * 0.5))
-            c1, c2 = (x1, y1), (x2, y2)  # c1是左上角，c2是右下角
-            # 用长方形的对角端点画框，框住检测出来的人的位置
-            cv2.rectangle(image, c1, c2, color, thickness=line_thickness, lineType=cv2.LINE_AA)
-            font_thickness = max(line_thickness - 1, 2)
-            t_size = cv2.getTextSize(lbl, 0, 1, 2)[0]
-            c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3  # 人框已经画完，现在将c2改为标签框的右上角，此时c1是标签框右下角
-            cv2.rectangle(image, c1, c2, color, -1, cv2.LINE_AA)  # 填满一个长方形色块，作为标签颜色背景
-            cv2.putText(image, '{}'.format(lbl), (c1[0], c1[1] - 2), 0, 1,
-                        [225, 255, 255], thickness=font_thickness, lineType=cv2.LINE_AA)  # 在色块上写字
-            # 定义碰撞带
-            list_pts.append([check_point_x - point_radius, check_point_y - point_radius])
-            list_pts.append([check_point_x - point_radius, check_point_y + point_radius])
-            list_pts.append([check_point_x + point_radius, check_point_y + point_radius])
-            list_pts.append([check_point_x + point_radius, check_point_y - point_radius])
-
-            ndarray_pts = np.array(list_pts, np.int32)
-            # 人框上的红点
-            cv2.fillPoly(image, [ndarray_pts], color=(0, 0, 255))
-            # 清空
-            list_pts.clear()
-
-        return image
 
     def closest(self, boxes):
         distance_list = []
